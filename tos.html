@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="favicon.png" type="image/png">
+<title>Olddroblox Portal | Policies</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background: #080808; /* darker black */
+    color: #f0f0f0;
+    display: flex;
+    height: 100vh;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 220px;
+    background: #0c0c0c; /* darker sidebar */
+    padding: 20px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .logo {
+    width: 170px;
+    height: auto;
+    margin-bottom: 30px;
+    display: block;
+  }
+
+  /* Keep buttons the same as your original */
+  .menu-item, .menu-item-selected {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    color: #f0f0f0;
+    text-decoration: none;
+    font-size: 14px;
+    text-align: left;
+    transition: all 0.2s;
+  }
+
+  .menu-item:hover {
+    background: #000e78;
+    cursor: pointer;
+  }
+
+  .menu-item-selected {
+    background: #000e78;
+    font-weight: bold;
+  }
+
+  /* Main content */
+  .main {
+    flex-grow: 1;
+    background: #0a0a0a; /* darker main area */
+    padding: 30px;
+    overflow-y: auto;
+  }
+
+  h1 {
+    margin-bottom: 30px;
+    font-size: 32px;
+    color: #00bfff;
+  }
+
+  /* Cards */
+  .card {
+    background: #121212; /* darker cards */
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.8);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .card h2 {
+    font-size: 20px;
+    color: #00bfff;
+    margin-bottom: 0;
+  }
+
+  .card-icon {
+    font-size: 20px;
+    transition: transform 0.3s;
+  }
+
+  .card p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #ccc;
+    margin-top: 15px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+  }
+
+  .card.open p {
+    max-height: 500px;
+  }
+
+  .updated {
+    font-size: 12px;
+    color: #999;
+    text-align: right;
+    margin-top: 10px;
+  }
+
+  /* Message banner with close button */
+  .message-banner {
+    background: #451e1e;
+    color: #fab1b1;
+    border: 1px solid #702f2f;
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-size: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+  }
+
+  .message-banner.fade-out {
+    opacity: 0;
+  }
+
+  .message-banner button.close-btn {
+    background: none;
+    border: none;
+    color: #fab1b1;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 20px;
+  }
+
+  .message-banner button.close-btn:hover {
+    color: #fff;
+  }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <img src="oldroblox.png" alt="Logo" class="logo">
+  <a href="/management" class="menu-item">Licenses</a>
+  <a href="#" class="menu-item">Domains</a>
+  <a href="/job" class="menu-item">Apply For Work</a>
+  <a href="#" class="menu-item">Learning Management Systems</a>
+  <a href="/tos?" class="menu-item-selected">Policies</a>
+</div>
+
+<div class="main">
+  <div class="message-banner" id="messageBanner">
+    <span>Warning To All Users: This Part of this site is in Maintenance Until finished with this new page Thank You.</span>
+    <button class="close-btn" id="closeBanner">×</button>
+  </div>
+  
+  <h1>Our Policies</h1>
+
+  <div class="card" onclick="toggleCard(this)">
+    <div class="card-header">
+      <h2>Privacy Policy</h2>
+      <span class="card-icon">+</span>
+    </div>
+    <p>
+      We are committed to protecting your privacy. This policy explains how we
+      handle your data responsibly and transparently.
+    </p>
+    <div class="updated">Last updated: 2025-01-15</div>
+  </div>
+
+  <div class="card" onclick="toggleCard(this)">
+    <div class="card-header">
+      <h2>Terms of Service</h2>
+      <span class="card-icon">+</span>
+    </div>
+    <p>
+        Hello Users, This is an updated TOS of oldroblox any breaking of this TOS can lead to a ban
+        - OldrobloxCorp
+        Here are the rules:
+        Do not spam or try to get personal info of users on our platform or any type of spamming is banned.
+        Do not try to force employees or threaten employees of oldrobloxcorp if you do this can get you banned for 3 WEEKS!
+        Please do not spam employee job applications on our job site this is not funny or is not going to give you the job faster.
+        Please Do not try to ask us in person for a job this will not give it faster you will maybe not get the job and make it worst.
+        this is for users on roblox or on minecraft if your banned from services you will be not allowed to enter any more assets or servers.
+        (Vigilante Groups): Law enforcement professionals are best positioned to investigate potential crimes. Therefore, we want to be sure any violations on oldroblox are reported and acted upon through the proper channels.
+        Unfortunately, there are cases of vigilante groups or individuals violating our policies to entrap users or otherwise self-police the platform. While these groups may appear to have the public's interest at heart, they are in fact acting in ways that could be harmful to others, both on and off our platform. For example, their efforts may leave bad actors on the platform longer simply to create more sensationalized social media content.
+        Actions taken by vigilante groups increase the risk of more users being exposed to bad actors and can delay enforcement efforts by both oldroblox and law enforcement. Any account's, including those of vigilante groups or individuals, caught violating our policies will face consequences up to and including removal and banning, where warranted. We enforce our policies in accordance with our Community Standards and overall Terms of Use.
+        Instead of taking matters into their own hands, we encourage the community to report any inappropriate behavior directly to oldroblox or law enforcement using the easy-to-report methods. You Can Help with anything with Law Enforment to help us Please Do not Try to hurt these Users if you do can be used aggenst you Thank You or
+        Oldroblox in court we do not want any harmful content thank you.
+    </p>
+    <div class="updated">Last updated: 2025-08-19</div>
+  </div>
+
+  <div class="card" onclick="toggleCard(this)">
+    <div class="card-header">
+      <h2>Acceptable Use Policy</h2>
+      <span class="card-icon">+</span>
+    </div>
+    <p>
+      To maintain a safe and respectful environment, all users must follow
+      acceptable use guidelines. Misuse may result in suspension.
+    </p>
+    <div class="updated">Last updated: 2024-11-20</div>
+  </div>
+</div>
+
+<script>
+  // Close banner with fade out
+  document.getElementById("closeBanner").addEventListener("click", function() {
+    const banner = document.getElementById("messageBanner");
+    banner.classList.add("fade-out");
+    setTimeout(() => banner.style.display = "none", 500);
+  });
+
+  const cards = document.querySelectorAll('.card');
+
+  function toggleCard(card) {
+    card.classList.toggle('open');
+    const icon = card.querySelector('.card-icon');
+    icon.textContent = card.classList.contains('open') ? '-' : '+';
+  }
+</script>
+
+</body>
+</html>

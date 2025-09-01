@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checker</title>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #007bff;
+        }
+
+        #ip-display {
+            font-size: 1.5em;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .loading {
+            color: #666;
+        }
+
+        .error {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Your IP Address [DO NOT SHARE]</h1>
+        <p id="ip-display" class="loading">Loading...</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ipDisplay = document.getElementById('ip-display');
+
+            async function getIPAddress() {
+                try {
+                    // Use the ipify API to get the public IP address
+                    const response = await fetch('https://api.ipify.org?format=json');
+                    
+                    // Check if the request was successful
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    ipDisplay.textContent = data.ip; // Display the IP address
+                    ipDisplay.classList.remove('loading'); 
+                } catch (error) {
+                    console.error('Error fetching IP address:', error);
+                    ipDisplay.textContent = 'Failed to retrieve IP address.';
+                    ipDisplay.classList.remove('loading');
+                    ipDisplay.classList.add('error');
+                }
+            }
+
+            getIPAddress();
+        });
+    </script>
+</body>
+</html>

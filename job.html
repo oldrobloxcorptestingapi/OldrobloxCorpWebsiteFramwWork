@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Job Application</title>
+<link rel="icon" href="safety.png" type="image/png">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    font-family: Arial, sans-serif;
+    background: #0a0a0a;
+    color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+  }
+  .container {
+    background: #141414;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    padding: 30px;
+    width: 100%;
+    max-width: 650px;
+    position: relative;
+  }
+  h2 { margin-bottom: 20px; font-size: 22px; font-weight: bold; }
+  label { font-size: 14px; color: #ccc; }
+  input, select, textarea {
+    width: 100%; padding: 12px; border-radius: 10px;
+    border: 1px solid #333; background: #1e1e1e; color: #f0f0f0;
+    font-size: 14px; outline: none; transition: border 0.3s;
+  }
+  input:focus, select:focus, textarea:focus { border-color: #0056ff; }
+  textarea { resize: none; }
+  button {
+    background: #0056ff; border: none; padding: 12px 20px;
+    border-radius: 10px; color: white; font-weight: bold; cursor: pointer;
+    margin-top: 20px; transition: background 0.3s; width: 100%;
+  }
+  button:hover { background: #003bb3; }
+  .hidden { display: none; opacity: 0; }
+  .fade-in { animation: fadeIn 0.8s forwards; }
+  @keyframes fadeIn { from {opacity:0; transform: translateY(20px);} to {opacity:1; transform: translateY(0);} }
+
+  .step-indicator { display: flex; justify-content: center; margin-bottom: 20px; }
+  .step { width: 12px; height: 12px; border-radius: 50%; background: #333; margin: 0 6px; }
+  .step.active { background: #0056ff; }
+  .form-grid { display: grid; gap: 20px; }
+  @media (min-width: 700px) { .form-grid { grid-template-columns: 1fr 1fr; } }
+
+  /* Checkbox */
+  .checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 14px;
+    color: #ddd;
+  }
+  .checkbox-wrapper input { display: none; }
+  .checkmark-box {
+    width: 20px; height: 20px;
+    border: 2px solid #555;
+    border-radius: 6px;
+    margin-right: 10px;
+    background: #1a1a1a;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .checkbox-wrapper input:checked + .checkmark-box {
+    background: #0056ff;
+    border-color: #0056ff;
+  }
+  .checkbox-wrapper input:checked + .checkmark-box::after {
+    content: "";
+    position: absolute;
+    left: 6px; top: 2px;
+    width: 5px; height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  /* Circle → Check animation */
+  .circle {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    border: 4px solid #0056ff;
+    margin: 20px auto;
+    position: relative;
+    animation: pop 0.5s ease forwards;
+  }
+  .circle.check::after {
+    content: "";
+    position: absolute;
+    left: 20px; top: 12px;
+    width: 12px; height: 25px;
+    border: solid #0056ff;
+    border-width: 0 4px 4px 0;
+    transform: rotate(45deg);
+    animation: draw 0.5s ease forwards;
+  }
+  @keyframes pop { from {transform: scale(0);} to {transform: scale(1);} }
+  @keyframes draw { from {height:0; width:0;} to {height:25px; width:12px;} }
+
+  /* Submission banner */
+  #submissionMessage {
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: left;
+    width: 100%;
+    max-width: 650px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    z-index: 1000;
+    opacity: 0;
+    transition: top 0.6s ease, opacity 0.6s ease;
+  }
+  #submissionMessage.show { top: 20px; opacity: 0.95; }
+  #submissionMessage.success { background: #155724; color: #d4edda; }
+  #submissionMessage.error { background: #3b0d0d; color: #f8d7da; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Landing Card -->
+  <div id="landingCard">
+    <h2>Welcome</h2>
+    <p style="color:#ccc;">Choose an option to continue:</p>
+    <button id="applyBtn" type="button">Apply for a Job</button>
+    <button id="employeeBtn" type="button">Already an Employee</button>
+  </div>
+
+  <!-- Applicant TOS -->
+  <div id="tosCard" class="hidden">
+    <div class="step-indicator"><div class="step active"></div><div class="step"></div></div>
+    <h2>Terms of Service</h2>
+    <p style="font-size:14px; line-height:1.5; color:#ccc;">
+      Please read and accept our Terms of Service before applying.
+    </p>
+    <label class="checkbox-wrapper" for="acceptTos">
+      <input type="checkbox" id="acceptTos">
+      <span class="checkmark-box"></span>
+      I accept all policies
+    </label>
+    <button id="continueBtn" type="button">Continue</button>
+  </div>
+
+  <!-- Job Application -->
+  <div id="jobFormCard" class="hidden">
+    <div class="step-indicator"><div class="step"></div><div class="step active"></div></div>
+    <h2>Job Application</h2>
+    <form id="jobForm">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" required>
+      <label for="email">Email</label>
+      <input type="email" id="email" required>
+      <label for="position">Position</label>
+      <select id="position" required>
+        <option value="">-- Select Position --</option>
+        <option>Developer</option><option>Designer</option>
+        <option>Support</option><option>Moderator</option>
+        <option>Security</option><option>Safety Director</option>
+      </select>
+      <div class="form-grid">
+        <div>
+          <label for="experience">Experience</label>
+          <textarea id="experience" rows="5"></textarea>
+        </div>
+        <div>
+          <label for="message">Motivation</label>
+          <textarea id="message" rows="5"></textarea>
+        </div>
+      </div>
+      <button type="submit">Submit Application</button>
+    </form>
+  </div>
+
+  <!-- Employee ToS -->
+  <div id="employeeCard" class="hidden">
+    <h2>Employee Agreement</h2>
+    <p style="font-size:14px; line-height:1.5; color:#ccc;">
+      Please confirm that you agree to the employee Terms of Service.
+    </p>
+    <label class="checkbox-wrapper" for="acceptEmployeeTos">
+      <input type="checkbox" id="acceptEmployeeTos">
+      <span class="checkmark-box"></span>
+      I accept all policies
+    </label>
+    <button id="employeeContinueBtn" type="button">Confirm</button>
+    <div id="employeeAnimation" class="hidden"></div>
+  </div>
+</div>
+
+<!-- Submission Message -->
+<div id="submissionMessage"></div>
+
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAiQyWV-C9kU10_UG5NSPovDDP9IuA3hN8",
+    authDomain: "oldrobloxcorpjobsave.firebaseapp.com",
+    projectId: "oldrobloxcorpjobsave",
+    storageBucket: "oldrobloxcorpjobsave.appspot.com",
+    messagingSenderId: "134496447474",
+    appId: "1:134496447474:web:97aedf8af186742d93196b"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Elements
+  const landingCard = document.getElementById("landingCard");
+  const tosCard = document.getElementById("tosCard");
+  const jobFormCard = document.getElementById("jobFormCard");
+  const employeeCard = document.getElementById("employeeCard");
+  const submissionMessage = document.getElementById("submissionMessage");
+
+  // Navigation
+  document.getElementById("applyBtn").onclick = () => {
+    landingCard.classList.add("hidden");
+    tosCard.classList.remove("hidden");
+    tosCard.classList.add("fade-in");
+  };
+  document.getElementById("employeeBtn").onclick = () => {
+    landingCard.classList.add("hidden");
+    employeeCard.classList.remove("hidden");
+    employeeCard.classList.add("fade-in");
+  };
+
+  // Applicant ToS → Job form
+  document.getElementById("continueBtn").onclick = () => {
+    if (!document.getElementById("acceptTos").checked) return alert("Accept ToS first!");
+    tosCard.classList.add("hidden");
+    jobFormCard.classList.remove("hidden");
+    jobFormCard.classList.add("fade-in");
+  };
+
+  // Applicant form submit
+  document.getElementById("jobForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const position = document.getElementById("position").value;
+    const experience = document.getElementById("experience").value;
+    const message = document.getElementById("message").value;
+
+    try {
+      await addDoc(collection(db, "jobApplications"), {
+        name, email, position, experience, message,
+        createdAt: serverTimestamp()
+      });
+      submissionMessage.textContent = "✅ Application submitted!";
+      submissionMessage.classList.remove("error");
+      submissionMessage.classList.add("success", "show");
+      e.target.reset();
+      setTimeout(() => submissionMessage.classList.remove("show"), 4000);
+    } catch (err) {
+      submissionMessage.textContent = "❌ Failed to submit.";
+      submissionMessage.classList.remove("success");
+      submissionMessage.classList.add("error", "show");
+      setTimeout(() => submissionMessage.classList.remove("show"), 4000);
+    }
+  });
+
+  // Employee ToS confirm
+  document.getElementById("employeeContinueBtn").onclick = async () => {
+    if (!document.getElementById("acceptEmployeeTos").checked) return alert("Accept ToS first!");
+    const animationBox = document.getElementById("employeeAnimation");
+    animationBox.classList.remove("hidden");
+    animationBox.innerHTML = ""; // clear old
+    animationBox.innerHTML = '<div class="circle check"></div>';
+    try {
+      await addDoc(collection(db, "employeeAcceptances"), {
+        accepted: true,
+        createdAt: serverTimestamp()
+      });
+      submissionMessage.textContent = "✅ Employee confirmation saved!";
+      submissionMessage.classList.remove("error");
+      submissionMessage.classList.add("success", "show");
+      setTimeout(() => submissionMessage.classList.remove("show"), 4000);
+    } catch (err) {
+      submissionMessage.textContent = "❌ Failed to save.";
+      submissionMessage.classList.remove("success");
+      submissionMessage.classList.add("error", "show");
+      setTimeout(() => submissionMessage.classList.remove("show"), 4000);
+    }
+  };
+</script>
+</body>
+</html>

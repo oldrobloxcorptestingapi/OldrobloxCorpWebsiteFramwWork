@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" href="safety.png" type="image/png">
+  <title>Oldroblox Security Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #000000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-box {
+      background: #2e2e2e;
+      padding: 60px;
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: all 0.5s ease;
+    }
+
+    .login-box.success {
+      animation: glowSuccess 0.5s ease forwards;
+    }
+
+    @keyframes glowSuccess {
+      0% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.2); transform: scale(1); }
+      50% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.6); transform: scale(1.03); }
+      100% { box-shadow: 0 0 12px rgba(0, 255, 0, 0.4); transform: scale(1); }
+    }
+
+    .login-box.fade-out {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+
+    .login-box img {
+      width: 100px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    .login-box h2 {
+      color: white;
+      margin-bottom: 10px;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    .login-box p.approved {
+      color: #8f8f8f;
+      font-size: 16px;
+      margin-bottom: 25px;
+    }
+
+    .login-box input {
+      width: 93%;
+      padding: 16px;
+      margin-bottom: 18px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      transition: border 0.3s;
+    }
+
+    .login-box input.invalid {
+      border: 2px solid red;
+    }
+
+    .login-box input.shake {
+      animation: shake 0.3s;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 16px;
+      background: red;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .login-box .message {
+      margin-top: 10px;
+      text-align: center;
+      font-weight: bold;
+      color: red;
+    }
+
+    .recaptcha-container {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+      transition: box-shadow 0.3s;
+      border-radius: 10px;
+    }
+
+    .recaptcha-container.invalid {
+      animation: pulseError 1.5s ease infinite;
+    }
+
+    @keyframes pulseError {
+      0% { box-shadow: 0 0 0 red; }
+      50% { box-shadow: 0 0 15px red; }
+      100% { box-shadow: 0 0 0 red; }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box" id="loginBox">
+    <img src="safety.png" alt="Security Icon">
+    <h2>Oldroblox Security Login</h2>
+    <p class="approved">🔒Admin Only Login🔒</p>
+
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+
+    <div class="recaptcha-container" id="recaptchaContainer">
+      <div class="g-recaptcha"
+           data-sitekey="6LeyaHYrAAAAALwGA4Ka3y-0eo5GlRnMOt7OJk8K"
+           data-theme="dark"></div>
+    </div>
+
+    <button onclick="login()">Login</button>
+    <div class="message" id="message"></div>
+  </div>
+
+  <!-- reCAPTCHA -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+  <!-- Firebase (only email & password auth, Google removed) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAuKVVUBWNDNgtDPwAdEqaZNabwfXyKmRw",
+      authDomain: "oldrobloxcorpsinginadmin.firebaseapp.com",
+      projectId: "oldrobloxcorpsinginadmin",
+      storageBucket: "oldrobloxcorpsinginadmin.appspot.com",
+      messagingSenderId: "1038903313808",
+      appId: "1:1038903313808:web:e86fd0d6af963648045f15"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.login = async function () {
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const message = document.getElementById('message');
+      const loginBox = document.getElementById('loginBox');
+      const recaptchaContainer = document.getElementById('recaptchaContainer');
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      const recaptchaResponse = grecaptcha.getResponse();
+
+      emailInput.classList.remove('shake', 'invalid');
+      passwordInput.classList.remove('shake', 'invalid');
+      recaptchaContainer.classList.remove('invalid');
+      loginBox.classList.remove('success', 'fade-out');
+      message.textContent = "";
+
+      if (!recaptchaResponse) {
+        message.style.color = "red";
+        message.textContent = "Please complete the reCAPTCHA.";
+        recaptchaContainer.classList.add('invalid');
+        setTimeout(() => {
+          recaptchaContainer.classList.remove('invalid');
+          message.textContent = "";
+        }, 3000);
+        return;
+      }
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        localStorage.setItem("authenticated", "true");
+        localStorage.setItem("loginTime", Date.now());
+
+        message.style.color = "green";
+        message.textContent = "Login successful!";
+        loginBox.classList.add('success');
+        setTimeout(() => loginBox.classList.add('fade-out'), 800);
+        setTimeout(() => window.location.href = "/EST/index.html", 2000);
+      } catch (error) {
+        console.error(error.code, error.message);
+        message.style.color = "red";
+        message.textContent = "Invalid email or password.";
+        emailInput.classList.add('invalid', 'shake');
+        passwordInput.classList.add('invalid', 'shake');
+        void emailInput.offsetWidth;
+        void passwordInput.offsetWidth;
+        setTimeout(() => {
+          message.textContent = "";
+          emailInput.classList.remove('invalid', 'shake');
+          passwordInput.classList.remove('invalid', 'shake');
+        }, 3000);
+      }
+    };
+  </script>
+</body>
+</html>
