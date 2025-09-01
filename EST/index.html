@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>OldrobloxCorp</title>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- W3CSS + Fonts -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+      body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
+      .w3-bar,h1,button {font-family: "Montserrat", sans-serif}
+      .fa-anchor,.fa-coffee {font-size:200px}
+
+      /* --- Grids --- */
+      .grid-section { padding: 64px 16px; }
+      .grid-container { display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: center; }
+      .grid-image { flex: 1 1 300px; text-align: center; }
+      .grid-image img { width: 100%; max-width: 350px; border-radius: 20px; }
+      .grid-text { flex: 2 1 400px; color: #333; }
+      .grid-text h1 { margin-bottom: 16px; }
+      .grid-text p { font-size: 16px; line-height: 1.5; color: #555; }
+
+      /* --- Game grid styles --- */
+      .games-section { background: #111; color: #fff; padding: 64px 16px; }
+      .games-section h2 { margin-bottom: 24px; font-weight: 700; }
+      .game-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 24px;
+      }
+      .game-card {
+        background: rgba(255,255,255,0.03);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        color: inherit;
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(255,255,255,0.08);
+        position: relative;
+      }
+      .game-card:hover { transform: translateY(-6px); box-shadow: 0 18px 36px rgba(0,0,0,0.6); }
+      .game-thumb { width: 100%; aspect-ratio: 1/1; background: #222; overflow: hidden; cursor: pointer; }
+      .game-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease; }
+      .game-card:hover .game-thumb img { transform: scale(1.05); }
+      .game-info { padding: 16px; display: flex; flex-direction: column; flex-grow: 1; }
+      .game-title { margin: 0 0 6px; font-size: 18px; font-weight: 700; line-height: 1.2; }
+      .game-sub { margin: 0 0 14px; color: #bbb; font-size: 13px; }
+      .game-actions { margin-top: auto; }
+
+      /* Modern button */
+      .btn-open {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #fff;
+        background: linear-gradient(135deg, #ff416c, #ff4b2b);
+        border: 2px solid transparent;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255,75,43,0.4);
+      }
+      .btn-open:hover {
+        background: linear-gradient(135deg, #ff4b2b, #ff416c);
+        box-shadow: 0 8px 20px rgba(255,75,43,0.6);
+        transform: translateY(-2px) scale(1.05);
+        border: 2px solid #fff;
+      }
+
+      .badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.6); color: #fff; padding: 6px 10px; font-size: 12px; border-radius: 10px; backdrop-filter: blur(4px); }
+      .thumb-wrap { position: relative; }
+
+      /* Gradient text */
+      t { font-size: 40px; background: linear-gradient(to top, red, blue), linear-gradient(to right, #5500ff, #00ff55); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+      /* --- Shiny loading effect --- */
+      .game-card::before {
+        content: "";
+        position: absolute;
+        top: -100%;
+        left: -100%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(120deg,rgba(255, 255, 255, 0) 40%,rgba(255, 255, 255, 0.25) 50%,rgba(255, 255, 255, 0) 60%);
+        transform: rotate(25deg);
+        animation: shine 2.5s infinite;
+        pointer-events: none;
+      }
+      @keyframes shine {
+        0% { top: -100%; left: -100%; }
+        100% { top: 100%; left: 100%; }
+      }
+
+      /* --- Overlay Modal --- */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.85);
+      }
+      .modal-content {
+        margin: auto;
+        background: #111;
+        color: #fff;
+        border-radius: 20px;
+        padding: 30px;
+        max-width: 600px;
+        animation: fadeIn 0.3s ease;
+      }
+      .close {
+        color: #fff;
+        float: right;
+        font-size: 30px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .close:hover { color: #ff4b2b; }
+      @keyframes fadeIn {
+        from {opacity: 0; transform: scale(0.95);}
+        to {opacity: 1; transform: scale(1);}
+      }
+    </style>
+  </head>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-red w3-card w3-left-align w3-large">
+    <a href="/" class="w3-bar-item w3-button w3-padding-large w3-white">Home</a>
+    <a href="/chat/index" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Chat</a>
+    <a href="https://youtube.com/@oldrobloxcorp" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">YouTube</a>
+    <a href="/tos?" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Terms of Service</a>
+    <button id="logoutBtn" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white w3-right">Logout</button>
+  </div>
+</div>
+
+<!-- Hero -->
+<header class="w3-container w3-red w3-center" style="padding:128px 16px">
+  <h1 class="w3-margin w3-jumbo">Pong</h1>
+  <p class="w3-xlarge">Classic Ping Pong</p>
+  <a href="loading" class="w3-button w3-black w3-padding-large w3-large w3-margin-top">Open</a>
+</header>
+
+<!-- Oldroblox PLUS Grid -->
+<section class="grid-section w3-light-grey">
+  <div class="grid-container w3-content">
+    <div class="grid-image"><img src="PLUS.png" alt="Oldroblox PLUS LOGO"></div>
+    <div class="grid-text">
+      <t>About Oldroblox PLUS</t>
+      <h5 class="w3-padding-32">Oldroblox PLUS is given out to certain people of our community as it has many perks.</h5>
+      <p>Oldroblox PLUS is inplemeted in everything we make even on our discord server if you get Oldroblox PLUS you will get a role in the discord server with your order ID wich is free you will need to send our main offical account on discord your Order ID to verify that you got Oldroblox PLUS and you will get a role on our roblox group and guilded server and you can join codes with us with a new channel to see the code to join and what game and more ceck it out today by metioning us on X or emailing us at corpoldroblox@gmail.com for a chance of Oldroblox PLUS.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Oldroblox Safety Grid -->
+<section class="grid-section">
+  <div class="grid-container w3-content">
+    <div class="grid-text">
+      <h1>Oldroblox Safety</h1>
+      <h5 class="w3-padding-32">Safety is taken very seriously due to personal info leaks and dangerous sites.</h5>
+      <p>We monitor to keep users safe and verify trustworthy members. Employees are unpaid volunteers that help keep this platform safe. Oldroblox tries our best to keep childs, adults, and more safe on the internet.</p>
+    </div>
+    <div class="grid-image"><img src="safety.png" alt="Oldroblox Safety LOGO"></div>
+  </div>
+</section>
+
+<!-- Featured Games -->
+<section class="games-section">
+  <div class="w3-content">
+    <h2 class="w3-center">Featured Games</h2>
+    <div class="game-grid">
+
+      <!-- Pong -->
+      <div class="game-card">
+        <div class="thumb-wrap">
+          <div class="game-thumb"><img src="pong.png" alt="Pong" onclick="openModal('pongModal')"></div>
+          <span class="badge">Classic</span>
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">Pong</h3>
+          <p class="game-sub">Classic Ping Pong Does not use the new oldroblox FrameWork System</p>
+          <div class="game-actions"><a class="btn-open" href="loading">Open</a></div>
+        </div>
+      </div>
+
+      <!-- Eaglercraft 1.8 -->
+      <div class="game-card">
+        <div class="thumb-wrap">
+          <div class="game-thumb"><img src="1.8.png" alt="Eaglercraft 1.8" onclick="openModal('eagler18Modal')"></div>
+          <span class="badge">Unblocked</span>
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">Eaglercraft 1.8</h3>
+          <p class="game-sub">Unblocked by Oldroblox FrameWork System</p>
+          <div class="game-actions"><a class="btn-open" href="/beta.html">Open</a></div>
+        </div>
+      </div>
+
+      <!-- Forge -->
+      <div class="game-card">
+        <div class="thumb-wrap">
+          <div class="game-thumb"><img src="forge.png" alt="Eaglercraft Forge" onclick="openModal('forgeModal')"></div>
+          <span class="badge">New</span>
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">Eaglercraft 1.8 Forge</h3>
+          <p class="game-sub">Unblocked by Oldroblox FrameWork System</p>
+          <div class="game-actions"><a class="btn-open" href="/forge.html">Open</a></div>
+        </div>
+      </div>
+
+      <!-- Eaglercraft 1.3 -->
+      <div class="game-card">
+        <div class="thumb-wrap">
+          <div class="game-thumb"><img src="beta.png" alt="Eaglercraft 1.3" onclick="openModal('eagler13Modal')"></div>
+          <span class="badge">New</span>
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">Eaglercraft 1.3</h3>
+          <p class="game-sub">Unblocked by Oldroblox FrameWork System</p>
+          <div class="game-actions"><a class="btn-open" href="/1.3.html">Open</a></div>
+        </div>
+      </div>
+
+      <!-- Eaglercraft 1.9 -->
+      <div class="game-card">
+        <div class="thumb-wrap">
+          <div class="game-thumb"><img src="1.9.png" alt="Eaglercraft 1.9" onclick="openModal('eagler19Modal')"></div>
+          <span class="badge">Unblocked</span>
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">Eaglercraft 1.9</h3>
+          <p class="game-sub">Unblocked by Oldroblox FrameWork System</p>
+          <div class="game-actions"><a class="btn-open" href="/1.9.html">Open</a></div>
+        </div>
+      </div>
+
+      <!-- Resent Client -->
+      <div class="game-card">
+        <div class="thumb-wrap">
+          <div class="game-thumb"><img src="resent.png" alt="Resent Client 4.0" onclick="openModal('resentModal')"></div>
+          <span class="badge">Unblocked</span>
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">Resent Client 4.0 (Patch 4)</h3>
+          <p class="game-sub">Unblocked By Oldroblox FrameWork System</p>
+          <div class="game-actions"><a class="btn-open" href="/beta2.html">Open</a></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- About Us Grid -->
+<section class="w3-row-padding w3-light-grey w3-padding-64 w3-container">
+  <div class="w3-content">
+    <div class="w3-third w3-center">
+        <img src="LOGO.png" alt="Oldroblox LOGO" style="width:100%">
+    </div>
+    <div class="w3-twothird">
+      <h1>About us</h1>
+      <h5 class="w3-padding-32">We are a small company with only a few employees hosting many projects for your enjoyment.</h5>
+      <p class="w3-text-grey">We are a company with a few employees trying to make you happy with projects like games, websites, and more. If you aren't happy, contact us to tell us about it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Framework Grid -->
+<section class="w3-row-padding w3-light-grey w3-padding-64 w3-container">
+  <div class="w3-content">
+    <div class="w3-third w3-center">
+        <img src="framework.png" alt="Framework LOGO" style="width:100%">
+    </div>
+    <div class="w3-twothird">
+      <h1>The Oldroblox FrameWork</h1>
+      <h5 class="w3-padding-32">By Oldroblox</h5>
+      <p class="w3-text-grey">The Oldroblox framework handles processes to host games and apps securely. It uses login and third-party services to prevent unauthorized access. Currently in BETA.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Modals -->
+<div id="pongModal" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('pongModal')">&times;</span><h2>Pong</h2><p>Classic Pong hosted on OldrobloxCorp.</p><a href="loading" class="btn-open">Play Now</a></div></div>
+<div id="eagler18Modal" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('eagler18Modal')">&times;</span><h2>Eaglercraft 1.8</h2><p>Unblocked Minecraft 1.8 version with framework support.</p><a href="/beta.html" class="btn-open">Play Now</a></div></div>
+<div id="forgeModal" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('forgeModal')">&times;</span><h2>Eaglercraft 1.8 Forge</h2><p>Unblocked Forge edition with mods support.</p><a href="/forge.html" class="btn-open">Play Now</a></div></div>
+<div id="eagler13Modal" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('eagler13Modal')">&times;</span><h2>Eaglercraft 1.3</h2><p>Unblocked old-school Minecraft 1.3.</p><a href="/1.3.html" class="btn-open">Play Now</a></div></div>
+<div id="eagler19Modal" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('eagler19Modal')">&times;</span><h2>Eaglercraft 1.9</h2><p>Unblocked Minecraft 1.9 version with framework support.</p><a href="/1.9.html" class="btn-open">Play Now</a></div></div>
+<div id="resentModal" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('resentModal')">&times;</span><h2>Resent Client 4.0 (Patch 4)</h2><p>Unblocked Resent Client patched version.</p><a href="/beta2.html" class="btn-open">Play Now</a></div></div>
+
+<!-- Footer -->
+<div class="w3-container w3-black w3-center w3-opacity w3-padding-64"><h1 class="w3-margin w3-xlarge">thank you for stopping by enjoy</h1></div>
+
+<footer class="w3-container w3-padding-64 w3-center w3-opacity"> 
+  <div class="w3-xlarge w3-padding-32">
+    <a href="https://www.facebook.com/profile.php?id=61574117724882" class="fa fa-facebook-official w3-hover-opacity"></a>
+    <a href="https://x.com/OldrobloxCorp" class="fa fa-twitter w3-hover-opacity"></a>
+ </div>
+ <a class="w3-button w3-round-xxlarge w3-black w3-margin-bottom" href="https://discord.gg/XAF4XCZFRk" target="_blank">Our Discord</a>
+</footer>
+
+<!-- Firebase Logout -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAuKVVUBWNDNgtDPwAdEqaZNabwfXyKmRw",
+    authDomain: "oldrobloxcorpsinginadmin.firebaseapp.com",
+    projectId: "oldrobloxcorpsinginadmin",
+    storageBucket: "oldrobloxcorpsinginadmin.appspot.com",
+    messagingSenderId: "1038903313808",
+    appId: "1:1038903313808:web:e86fd0d6af963648045f15"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  document.getElementById("logoutBtn").addEventListener("click", async () => {
+    await signOut(auth);
+    alert("You have been logged out.");
+    window.location.href = "/login.html";
+  });
+</script>
+
+<script>
+function openModal(id) { document.getElementById(id).style.display = "block"; }
+function closeModal(id) { document.getElementById(id).style.display = "none"; }
+window.onclick = function(event) {
+  const modals = document.getElementsByClassName("modal");
+  for (let modal of modals) {
+    if (event.target == modal) { modal.style.display = "none"; }
+  }
+}
+</script>
+
+</body>
+</html>
