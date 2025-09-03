@@ -5,22 +5,22 @@
   <link rel="icon" href="favicon.png" type="image/png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  
+
   <!-- W3.CSS and fonts -->
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  
+
   <style>
-    body, h1, h2, h3, h4, h5, h6 { font-family: "Lato", sans-serif; }
-    .w3-bar, h1, button { font-family: "Montserrat", sans-serif; }
-    .fa-anchor, .fa-coffee { font-size: 200px; }
-    input, textarea { width: 100%; padding: 12px; margin: 6px 0; border: 1px solid #ccc; border-radius: 4px; }
-    button { background-color: #f44336; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; }
-    button:hover { background-color: #d32f2f; }
-    .success-msg { color: green; margin-top: 10px; }
-    .error-msg { color: red; margin-top: 10px; }
+    body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif;}
+    .w3-bar,h1,button {font-family: "Montserrat", sans-serif;}
+    input,textarea {width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:4px;}
+    button {background-color:#f44336;color:white;padding:12px 20px;border:none;border-radius:4px;cursor:pointer;}
+    button:hover {background-color:#d32f2f;}
+    .msg {margin-top:10px;display:none;}
+    .msg.ok {color:green;}
+    .msg.err {color:red;}
   </style>
 </head>
 <body>
@@ -38,7 +38,7 @@
 <!-- Page header -->
 <header class="w3-container w3-red w3-center" style="padding:128px 16px">
   <h1 class="w3-margin w3-jumbo">Oldroblox Support</h1>
-  <p class="w3-xlarge">Submit a support ticket and we will get back to you.</p>
+  <p class="w3-xlarge">Submit a support ticket and we’ll email you a confirmation.</p>
 </header>
 
 <!-- Support Form -->
@@ -46,56 +46,62 @@
   <div class="w3-content w3-half">
     <h2>Contact Support</h2>
     <form id="supportForm">
-      <label for="name">Name</label>
-      <input type="text" id="name" name="name" placeholder="Your name" required>
-      
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="Your email" required>
-      
-      <label for="message">Message</label>
-      <textarea id="message" name="message" placeholder="Your message" rows="6" required></textarea>
-      
+      <label>Name</label>
+      <input type="text" name="name" required>
+      <label>Email</label>
+      <input type="email" name="email" required>
+      <label>Message</label>
+      <textarea name="message" rows="6" required></textarea>
       <button type="submit">Submit Ticket</button>
-      <p class="success-msg" id="successMsg" style="display:none;">Your ticket was sent successfully!</p>
-      <p class="error-msg" id="errorMsg" style="display:none;">Failed to send ticket. Try again later.</p>
+      <p id="ok" class="msg ok">Your ticket was sent successfully!</p>
+      <p id="err" class="msg err">Failed to send ticket. Check console for details.</p>
     </form>
   </div>
 </div>
 
 <script>
+  // 🔴 Set your Vercel backend API URL
+  const API_URL = "https://oldroblox-support-backend.vercel.app/api";
+
   const form = document.getElementById("supportForm");
-  const successMsg = document.getElementById("successMsg");
-  const errorMsg = document.getElementById("errorMsg");
+  const okMsg = document.getElementById("ok");
+  const errMsg = document.getElementById("err");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    
-    successMsg.style.display = "none";
-    errorMsg.style.display = "none";
+    okMsg.style.display = "none";
+    errMsg.style.display = "none";
 
-    const formData = {
-      name: form.name.value,
-      email: form.email.value,
-      message: form.message.value
+    const payload = {
+      name: form.name.value.trim(),
+      email: form.email.value.trim(),
+      message: form.message.value.trim()
     };
 
     try {
-      const res = await fetch("https://oldroblox-support-backend.vercel.app/api", {
+      const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       });
 
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("HTTP error", res.status, text);
+        throw new Error(`HTTP ${res.status}`);
+      }
+
       const data = await res.json();
-      if (data.success) {
-        successMsg.style.display = "block";
+      if (data && data.success) {
+        okMsg.style.display = "block";
         form.reset();
       } else {
-        errorMsg.style.display = "block";
+        console.error("API returned:", data);
+        errMsg.style.display = "block";
       }
     } catch (err) {
-      console.error(err);
-      errorMsg.style.display = "block";
+      console.error("Fetch failed:", err);
+      errMsg.style.display = "block";
     }
   });
 </script>
