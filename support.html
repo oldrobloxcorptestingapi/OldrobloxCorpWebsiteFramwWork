@@ -1,67 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <title>OldrobloxCorp - Support</title>
+  <link rel="icon" href="favicon.png" type="image/png">
   <meta charset="UTF-8">
-  <title>Support Ticket</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
-    body {
-      background: #0a0a0a;
-      color: #fff;
-      font-family: Arial, sans-serif;
-    }
-    .w3-card-4 {
-      max-width: 500px;
-      margin: 50px auto;
-      background: #1a1a1a;
+    body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
+    .w3-bar,h1,button {font-family: "Montserrat", sans-serif}
+    .form-card {
+      max-width: 600px;
+      margin: 100px auto;
+      background: #fff;
       border-radius: 12px;
-      box-shadow: 0 0 25px rgba(255,0,0,0.3);
+      padding: 30px;
     }
-    button {
-      background: #d32f2f;
-      color: white;
-      font-size: 16px;
-      padding: 10px 20px;
+    .w3-button {
+      background: #d32f2f !important;
+      color: #fff !important;
     }
-    button:hover {
-      background: #b71c1c;
+    .w3-button:hover {
+      background: #b71c1c !important;
     }
   </style>
 </head>
 <body>
 
-  <div class="w3-container">
-    <h2 class="w3-center">Submit a Support Ticket</h2>
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-red w3-card w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-red" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+    <a href="/" class="w3-bar-item w3-button w3-padding-large w3-white">Home</a>
+    <a href="chat/index" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Chat</a>
+    <a href="https://youtube.com/@oldrobloxcorp" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Youtube</a>
+    <a href="tos?" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Terms of service</a>
+  </div>
 
-    <form action="https://api.web3forms.com/submit" method="POST" class="w3-container w3-card-4 w3-padding">
+  <!-- Navbar on small screens -->
+  <div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-large">
+    <a href="chat/index" class="w3-bar-item w3-button w3-padding-large">Chat</a>
+    <a href="https://youtube.com/@oldrobloxcorp" class="w3-bar-item w3-button w3-padding-large">Youtube</a>
+    <a href="tos?" class="w3-bar-item w3-button w3-padding-large">Terms of service</a>
+  </div>
+</div>
+
+<!-- Support Form -->
+<div class="w3-container">
+  <div class="form-card w3-card-4">
+    <h2 class="w3-center">Submit a Support Ticket</h2>
+    <form action="https://api.web3forms.com/submit" method="POST" class="w3-container">
 
       <!-- Replace with your Web3Forms access key -->
-      <input type="hidden" name="access_key" value="bf697182-55dd-4421-b74e-57c34d5c90a1">
+      <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
 
       <!-- Optional: redirect after submission -->
-      <input type="hidden" name="redirect" value="www.oldrobloxcorpdataconsole.work.gd">
+      <input type="hidden" name="redirect" value="https://yourdomain.com/thank-you.html">
 
       <p>
-        <label>Name</label>
-        <input class="w3-input w3-border" type="text" name="name" required>
+        <label><b>Name</b></label>
+        <input class="w3-input w3-border" type="text" name="name" placeholder="Your name" required>
       </p>
 
       <p>
-        <label>Email</label>
-        <input class="w3-input w3-border" type="email" name="email" required>
+        <label><b>Email</b></label>
+        <input class="w3-input w3-border" type="email" name="email" placeholder="Your email" required>
       </p>
 
       <p>
-        <label>Issue</label>
-        <textarea class="w3-input w3-border" name="message" rows="5" required></textarea>
+        <label><b>Message</b></label>
+        <textarea class="w3-input w3-border" name="message" rows="5" placeholder="Describe your issue..." required></textarea>
       </p>
 
       <p class="w3-center">
-        <button class="w3-button w3-round">Submit Ticket</button>
+        <button class="w3-button w3-round w3-padding-large">Submit Ticket</button>
       </p>
     </form>
   </div>
+</div>
+
+<!-- Footer -->
+<footer class="w3-container w3-padding-64 w3-center w3-opacity"> 
+  <div class="w3-xlarge w3-padding-32">
+    <a href="https://www.facebook.com/profile.php?id=61574117724882" class="fa fa-facebook-official w3-hover-opacity"></a>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-snapchat w3-hover-opacity"></i>
+    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+    <a href="https://x.com/OldrobloxCorp" class="fa fa-twitter w3-hover-opacity"></a>
+    <i class="fa fa-linkedin w3-hover-opacity"></i>
+  </div>
+  <a class="w3-button w3-round-xxlarge w3-black w3-margin-bottom" href="https://discord.gg/EVxAyRK4Ty" target="_blank">Our Discord</a>
+</footer>
+
+<script>
+// Toggle menu on mobile
+function myFunction() {
+  var x = document.getElementById("navDemo");
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+  } else { 
+    x.className = x.className.replace(" w3-show", "");
+  }
+}
+</script>
 
 </body>
 </html>
