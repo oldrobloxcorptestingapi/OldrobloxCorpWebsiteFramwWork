@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Support Ticket</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <style>
+    body {
+      background: #0a0a0a;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    .w3-card-4 {
+      max-width: 500px;
+      margin: 50px auto;
+      background: #1a1a1a;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(255,0,0,0.3);
+    }
+    button {
+      background: #d32f2f;
+      color: white;
+      font-size: 16px;
+      padding: 10px 20px;
+    }
+    button:hover {
+      background: #b71c1c;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="w3-container">
+    <h2 class="w3-center">Submit a Support Ticket</h2>
+
+    <form action="https://api.web3forms.com/submit" method="POST" class="w3-container w3-card-4 w3-padding">
+
+      <!-- Replace with your Web3Forms access key -->
+      <input type="hidden" name="access_key" value="bf697182-55dd-4421-b74e-57c34d5c90a1">
+
+      <!-- Optional: redirect after submission -->
+      <input type="hidden" name="redirect" value="www.oldrobloxcorpdataconsole.work.gd">
+
+      <p>
+        <label>Name</label>
+        <input class="w3-input w3-border" type="text" name="name" required>
+      </p>
+
+      <p>
+        <label>Email</label>
+        <input class="w3-input w3-border" type="email" name="email" required>
+      </p>
+
+      <p>
+        <label>Issue</label>
+        <textarea class="w3-input w3-border" name="message" rows="5" required></textarea>
+      </p>
+
+      <p class="w3-center">
+        <button class="w3-button w3-round">Submit Ticket</button>
+      </p>
+    </form>
+  </div>
+
+</body>
+</html>
