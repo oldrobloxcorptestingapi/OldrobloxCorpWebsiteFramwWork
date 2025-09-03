@@ -40,7 +40,6 @@
     <a href="tos?" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Terms of service</a>
   </div>
 
-  <!-- Navbar on small screens -->
   <div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-large">
     <a href="chat/index" class="w3-bar-item w3-button w3-padding-large">Chat</a>
     <a href="https://youtube.com/@oldrobloxcorp" class="w3-bar-item w3-button w3-padding-large">Youtube</a>
@@ -52,14 +51,8 @@
 <div class="w3-container">
   <div class="form-card w3-card-4">
     <h2 class="w3-center">Submit a Support Ticket</h2>
-    <form action="https://api.web3forms.com/submit" method="POST" class="w3-container">
-
-      <!-- Replace with your Web3Forms access key -->
-      <input type="hidden" name="access_key" value="bf697182-55dd-4421-b74e-57c34d5c90a1">
-
-      <!-- Optional: redirect after submission -->
-      <input type="hidden" name="redirect" value="https://yourdomain.com/thank-you.html">
-
+    <form id="support-form" class="w3-container">
+      
       <p>
         <label><b>Name</b></label>
         <input class="w3-input w3-border" type="text" name="name" placeholder="Your name" required>
@@ -96,15 +89,37 @@
 </footer>
 
 <script>
-// Toggle menu on mobile
-function myFunction() {
-  var x = document.getElementById("navDemo");
-  if (x.className.indexOf("w3-show") == -1) {
-    x.className += " w3-show";
-  } else { 
-    x.className = x.className.replace(" w3-show", "");
+  function myFunction() {
+    var x = document.getElementById("navDemo");
+    if (x.className.indexOf("w3-show") == -1) {
+      x.className += " w3-show";
+    } else { 
+      x.className = x.className.replace(" w3-show", "");
+    }
   }
-}
+
+  // Handle form submission with fetch()
+  document.getElementById("support-form").addEventListener("submit", async (e) => {
+    e.preventDefault(); // Prevent the default form submission
+    
+    const form = e.target;
+    const res = await fetch("https://oldroblox-support-backend-smwa.vercel.app/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: form.name.value,
+        email: form.email.value,
+        message: form.message.value
+      })
+    });
+    
+    if (res.ok) {
+        alert("Ticket submitted successfully!");
+        form.reset();
+    } else {
+        alert("Failed to submit ticket. Please try again later.");
+    }
+  });
 </script>
 
 </body>
