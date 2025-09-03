@@ -103,7 +103,7 @@
     e.preventDefault(); // Prevent the default form submission
     
     const form = e.target;
-    const res = await fetch("https://oldroblox-support-backend-smwa.vercel.app/api/index", {
+    const res = await fetch("https://oldroblox-support-backend-smwa.vercel.app/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
